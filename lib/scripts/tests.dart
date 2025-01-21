@@ -13,10 +13,27 @@ void testLocation() async {
   // passing in the city, state, and zip.
   // Debug with a breakpoint after the return (you can use a placeholder like print("test") for your breakpoint)
   // Check to ensure each location returns as expected through debugging. 
+  List<Map<String, String>> locations = [
+    {'city': 'Portland', 'state': 'OR', 'zip': '97201'},
+    {'city': 'Seattle', 'state': 'WA', 'zip': '98101'},
+    {'city': 'San Francisco', 'state': 'CA', 'zip': '94105'},
+    {'city': 'Chicago', 'state': 'IL', 'zip': '60601'},
+    {'city': 'New York', 'state': 'NY', 'zip': '10001'},
+  ];
 
-  location.getLocationFromAddress("oijeqofwkjfla", "asdfsd", "98839829382");
+  for (var locationObject in locations) {
+    String city = locationObject['city']!;
+    String state = locationObject['state']!;
+    String zip = locationObject['zip']!;
 
+    location.getLocationFromAddress(city,state,zip);
+  }
 }
+
+
+  
+
+
 
 
 void testForecast() async {
