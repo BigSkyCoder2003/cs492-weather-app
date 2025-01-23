@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:weatherapp/scripts/forecast.dart' as forecast;
 import 'package:weatherapp/scripts/tests.dart' as tests;
 import 'package:weatherapp/scripts/location.dart' as location;
 
@@ -59,7 +59,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  // TODO: Add a new list of forecast.Forecast variable called _forecasts
+  // TODO: Add a new list of forecast.Forecast variable called _forecasts DONE
+  List<forecast.Forecast> _forecasts = [];
   location.Location? _currentLocation;
 
   @override
@@ -72,15 +73,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-  // TODO Create a new function called getForecasts(location.Location currentLocation)
+  // TODO Create a new function called getForecasts(location.Location currentLocation) DONE
   // This function should use a location to call getForecastFromPoints(), passing in the lat, lon
   // use setState the same way as setLocation does to set your _forecasts to the returned forecasts
+
+  getForecasts(location.Location currentLocation) async{
+  List<forecast.Forecast> forecasts  = await forecast.getForecastFromPoints(currentLocation.latitude, currentLocation.longitude);
+    setState(() {
+        _forecasts = forecasts;
+      });
+
+
+
+  }
 
   void setLocation() async {
     if (_currentLocation == null){
       // location.Location? currentLocation = await location.getLocationFromAddress(city, state, zip);
       location.Location? currentLocation = await location.getLocationFromGps();
-
+        getForecasts(currentLocation);
       // TODO: Add a call to your getForecasts function passing in the currentLocation
       
       setState(() {
@@ -113,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               locationWidget(_currentLocation),
+              forecastWidget(_forecasts.isNotEmpty ? _forecasts[0] : null),
               // TODO: add a new call to forecastWidget that passes in _forecasts[0]
             ],
           ),
@@ -121,9 +133,48 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  
+  // required this.name,
+  //   required this.isDaytime,
+  //   required this.temperature,
+  //   required this.temperatureUnit,
+  //   required this.windSpeed,
+  //   required this.windDirection,
+  //   required this.shortForecast,
+  //   required this.detailedForecast,
+  //   required this.precipitationProbability,
+  //   required this.humidity,
+  //   required this.dewpoint,
+
+  // final String? name;
+  // final bool isDaytime;
+  // final int temperature;
+  // final String temperatureUnit;
+  // final String windSpeed;
+  // final String windDirection;
+  // final String shortForecast;
+  // final String? detailedForecast;
+  // final int? precipitationProbability;
+  // final int? humidity;
+  // final num? dewpoint;
+
   // TODO: add a new Row forecastWidget to display some basic forecast information
   // you can choose the parts that you want to display for now.
+  Row forecastWidget(forecast.Forecast? currentForecast) {
+    return Row(
+      children: [
+        Text(
+          currentForecast != null ? currentForecast.windSpeed.toString() : "WindSpeed",
+          style: TextStyle(fontSize: 16, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          currentForecast != null ? currentForecast.temperature.toString() : "Temperature" ,
+          style: TextStyle(fontSize: 16, color: Colors.black),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
 
   Row locationWidget(location.Location? currentLocation) {
     return Row(
