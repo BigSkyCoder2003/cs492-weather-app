@@ -76,12 +76,114 @@ class Forecast{
     // TODO: Keep adding to this logic to try to get rid of question marks
     // TODO: change the location in your android phone to at least 5 different location
     // with different climates so you can eliminate more question marks
-    if (shortForecast.toLowerCase().contains("sunny")){
+    if (shortForecast.toLowerCase().contains("sunny")) {
       return "assets/weather_icons/sunny.svg";
-    }
-    else {
+  } 
+  else if (shortForecast.toLowerCase().contains("clear")) {
+      return "assets/weather_icons/clear.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("partly cloudy")) {
+      return "assets/weather_icons/partly_cloudy.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("mostly sunny")) {
+      return "assets/weather_icons/mostly_sunny.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("mostly clear")) {
+      return "assets/weather_icons/mostly_clear.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("partly sunny")) {
+      return "assets/weather_icons/partly_clear.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("mostly cloudy")) {
+      return "assets/weather_icons/mostly_cloudy.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("cloudy")) {
+      return "assets/weather_icons/cloudy.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("patchy fog") || shortForecast.toLowerCase().contains("areas of fog")) {
+      return "assets/weather_icons/fog.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("patchy blowing dust")) {
+      return "assets/weather_icons/dust.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("patchy blowing snow")) {
+      return "assets/weather_icons/blowing_snow.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("freezing drizzle")) {
+      return "assets/weather_icons/droplet_light.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("freezing drizzle likely")) {
+      return "assets/weather_icons/droplet_moderate.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("slight chance drizzle")) {
+      return "assets/weather_icons/droplet_drizzle.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("freezing rain")) {
+      return "assets/weather_icons/sleet_hail.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("chance freezing rain")) {
+      return "assets/weather_icons/sleet_hail.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("rain showers") || shortForecast.toLowerCase().contains("rain")) {
+      return "assets/weather_icons/showers.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("rain showers likely") || shortForecast.toLowerCase().contains("light rain likely")) {
+      return "assets/weather_icons/scattered_showers.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("slight chance rain showers")) {
+      return "assets/weather_icons/showers.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("light rain")) {
+      return "assets/weather_icons/droplet_light.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("slight chance light rain") || shortForecast.toLowerCase().contains("chance light rain")) {
+      return "assets/weather_icons/droplet_moderate.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("rain and snow")) {
+      return "assets/weather_icons/mixed_rain_hail_sleet.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("chance rain and snow")) {
+      return "assets/weather_icons/mixed_rain_hail_sleet.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("snow showers") || shortForecast.toLowerCase().contains("chance snow showers")) {
+      return "assets/weather_icons/snow_showers.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("sleet")) {
+      return "assets/weather_icons/sleet_hail.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("chance sleet")) {
+      return "assets/weather_icons/sleet_hail.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("snow and patchy blowing snow")) {
+      return "assets/weather_icons/blowing_snow.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("heavy snow")) {
+      return "assets/weather_icons/heavy_snow.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("snow likely") || shortForecast.toLowerCase().contains("light snow likely")) {
+      return "assets/weather_icons/snow.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("slight chance light snow") || shortForecast.toLowerCase().contains("chance light snow")) {
+      return "assets/weather_icons/flurries.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("snow")) {
+      return "assets/weather_icons/snow.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("showers and thunderstorms")) {
+      return "assets/weather_icons/strong_tstorms.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("chance showers and thunderstorms")) {
+      return "assets/weather_icons/scattered_showers.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("thunderstorms likely")) {
+      return "assets/weather_icons/strong_tstorms.svg";
+  } 
+  else if (shortForecast.toLowerCase().contains("slight chance showers and thunderstorms")) {
+      return "assets/weather_icons/scattered_showers.svg";
+  } 
+  else {
       return "assets/weather_icons/question.svg";
-    }
+  }
   }
 }
 
