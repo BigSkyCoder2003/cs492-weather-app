@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 import 'package:weatherapp/scripts/location.dart' as location;
 import 'package:weatherapp/scripts/forecast.dart' as forecast;
@@ -7,6 +9,7 @@ import 'package:weatherapp/scripts/time.dart' as time;
 import 'package:weatherapp/widgets/forecast_summaries_widget.dart';
 import 'package:weatherapp/widgets/forecast_widget.dart';
 import 'package:weatherapp/widgets/location_widget.dart';
+
 
 
 void main() {
@@ -118,24 +121,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return _forecastsHourly.where((f)=>time.equalDates(f.startTime, _dailyForecasts[i].startTime)).toList();
   }
 
-  void setLocation() async {
-    if (_location == null){
-      location.Location currentLocation = await location.getLocationFromGps();
-
-      List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
-      List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
-
-      setState(() {
-        _location = currentLocation;
-        _forecastsHourly = currentHourlyForecasts;
-        _forecasts = currentForecasts;
-        setDailyForecasts();
-        _filteredForecastsHourly = getFilteredForecasts(0);
-        _activeForecast = _forecastsHourly[0];
-        
-        
-      });
+  void setLocation([List<String>? locationList]) async {
+    location.Location currentLocation;
+    if (locationList == null){
+      currentLocation = await location.getLocationFromGps();
     }
+    else {
+      currentLocation = await location.getLocationFromAddress(locationList[0], locationList[1], locationList[2]) as location.Location;
+    }
+
+    List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
+    List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
+
+    setState(() {
+      _location = currentLocation;
+      _forecastsHourly = currentHourlyForecasts;
+      _forecasts = currentForecasts;
+      setDailyForecasts();
+      _filteredForecastsHourly = getFilteredForecasts(0);
+      _activeForecast = _forecastsHourly[0];
+    });
   }
 
   @override
@@ -173,23 +178,77 @@ class _MyHomePageState extends State<MyHomePage> {
             filteredForecastsHourly: _filteredForecastsHourly,
             setActiveForecast: setActiveForecast,
             setActiveHourlyForecast: setActiveHourlyForecast),
-          LocationTabWidget()]
+          LocationTabWidget(onLocationChanged: (locationList) => setLocation(locationList)),
+          ],
         ),
       ),
     );
   }
 }
 
-// TODO: Add a button to this widget that sets the active location to the phone's GPS location
-// TODO: Add 3 text fields for city state zip and a submit button that sets the location based on the user's entries
-class LocationTabWidget extends StatelessWidget {
+// TODO: Add a button to this widget that sets the active location to the phone's GPS location DONE
+// TODO: Add 3 text fields for city state zip and a submit button that sets the location based on the user's entries DONE
+class LocationTabWidget extends StatefulWidget {
+  final Function(List<String>) onLocationChanged;
+
   const LocationTabWidget({
     super.key,
+    required this.onLocationChanged,
   });
 
   @override
+  _LocationTabWidgetState createState() => _LocationTabWidgetState();
+}
+
+class _LocationTabWidgetState extends State<LocationTabWidget> {
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController zipController = TextEditingController();
+
+  String activeLocation = "";
+
+  Future<void> _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      activeLocation = "Lat: ${position.latitude}, Long: ${position.longitude}";
+    });
+    widget.onLocationChanged([position.latitude.toString(), position.longitude.toString(), ""]);
+  }
+
+  void _setLocationFromTextFields() {
+    setState(() {
+      activeLocation = "${cityController.text}, ${stateController.text}, ${zipController.text}";
+    });
+    widget.onLocationChanged([cityController.text, stateController.text, zipController.text]);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Text("PLACEHOLDER!!!!!");
+    return Column(
+      children: [
+        Text(activeLocation),
+        ElevatedButton(
+          onPressed: _getCurrentLocation,
+          child: Text("Set to Current Location"),
+        ),
+        TextField(
+          controller: cityController,
+          decoration: InputDecoration(labelText: "City"),
+        ),
+        TextField(
+          controller: stateController,
+          decoration: InputDecoration(labelText: "State"),
+        ),
+        TextField(
+          controller: zipController,
+          decoration: InputDecoration(labelText: "Zip Code"),
+        ),
+        ElevatedButton(
+          onPressed: _setLocationFromTextFields,
+          child: Text("Set Location"),
+        ),
+      ],
+    );
   }
 }
 
