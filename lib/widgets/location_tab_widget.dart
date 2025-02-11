@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/location.dart' as location;
 
 
-// TODO: When the user clicks the Get From Location button:
+// TODO: When the user clicks the Get From Address button:
 // Besides setting the active location (which it is already doing)
-// Add that location to a saved loations list (you'll need to create this)
+// Add that location to a saved locations list (you'll need to create this)
 // Display the saved locations in a new widget below the get from GPS button
 // make the saved location widgets onTap()-able, so the user can tap a previously saved location, 
 // setting the location based on that
 // 
 
 
-class LocationTabWidget extends StatelessWidget {
+
+class LocationTabWidget extends StatefulWidget {
   const LocationTabWidget({
     super.key,
     required Function setLocation,
@@ -20,16 +21,31 @@ class LocationTabWidget extends StatelessWidget {
 
   final Function _setLocation;
   final location.Location? _location;
+  
+
+  void _addLocation(location.Location location){
+    setState(() {
+      _location
+    });
+  }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         LocationDisplayWidget(activeLocation: _location),
-        LoctionInputWidget(setLocation: _setLocation),
+        LocationInputWidget(setLocation: _setLocation),
         ElevatedButton(onPressed: ()=>{_setLocation()},child: const Text("Get From GPS"))
       ],
     );
+  }
+  
+  @override
+  State<StatefulWidget> createState() {
+    
   }
 }
 
@@ -47,8 +63,8 @@ class LocationDisplayWidget extends StatelessWidget {
   }
 }
 
-class LoctionInputWidget extends StatefulWidget {
-  const LoctionInputWidget({
+class LocationInputWidget extends StatefulWidget {
+  const LocationInputWidget({
     super.key,
     required Function setLocation
   }) : _setLocation = setLocation;
@@ -56,10 +72,10 @@ class LoctionInputWidget extends StatefulWidget {
   final Function _setLocation;
 
   @override
-  State<LoctionInputWidget> createState() => _LoctionInputWidgetState();
+  State<LocationInputWidget> createState() => _LocationInputWidgetState();
 }
 
-class _LoctionInputWidgetState extends State<LoctionInputWidget> {
+class _LocationInputWidgetState extends State<LocationInputWidget> {
 
   // values
   String _city = "";
