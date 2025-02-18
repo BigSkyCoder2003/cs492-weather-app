@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/location.dart' as location;
 import 'package:weatherapp/scripts/location_storage.dart' as locationStorage;
+import 'package:weatherapp/scripts/location_database.dart' as locationDatabase;
 
 // TODO: Use the new location.database.dart logic to get the locations
 // update the addLocations function to only add a single location instead of the entire list of _saved locations
@@ -27,6 +28,8 @@ class _LocationTabWidgetState extends State<LocationTabWidget> {
 
   List<location.Location> _savedLocations = [];
 
+  late locationDatabase.LocationDatabase _db;
+
 
 
   void _setLocationFromAddress(String city, String state, String zip) async {
@@ -44,14 +47,15 @@ class _LocationTabWidgetState extends State<LocationTabWidget> {
     widget._setLocation(currentLocation);
   }
 
-  
+  _getDatabase(){
+    locationDatabase.LocationDatabase db = locationDatabase.LocationDatabase open();
+
+  }
   void _addLocation(location.Location location) async{
     setState(() {
       _savedLocations.add(location);
     });
 
-    await ls.writeLocations(_savedLocations);
-    
   }
 
   @override
@@ -63,6 +67,17 @@ class _LocationTabWidgetState extends State<LocationTabWidget> {
 
   void _loadLocations() async {
     List<location.Location> locations = await ls.readLocations();
+    locationDatabase.LocationDatabase db = await locationDatabase.LocationDatabase.open();
+    _db =db;
+    
+    setState(() {
+      _savedLocations = locations;
+    });
+  }
+
+  void _loadDatabase() async {
+    List<location.Location> locations = await ls.readLocations();
+    locationDatabase.LocationDatabase db = await locationDatabase.LocationDatabase open();
     setState(() {
       _savedLocations = locations;
     });
