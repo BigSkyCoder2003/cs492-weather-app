@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/settings_provider.dart';
 import 'package:weatherapp/widgets/forecast/forecast_tab_widget.dart';
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: title,
-      theme: themes.lightTheme,
-      darkTheme: themes.darkTheme,
+      theme: themes.lightTheme(Color(settingsProvider.darkModeColor)),
+      darkTheme: themes.darkTheme(Color(settingsProvider.darkModeColor)),
       themeMode: settingsProvider.darkMode ? ThemeMode.dark : ThemeMode.light,
       home: MyHomePage(title: title),
     );
@@ -58,9 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         endDrawer: SettingsDrawer(settingsProvider: settingsProvider),
         appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            actions: [
-              SettingsButton()
-            ],
+            actions: [SettingsButton()],
             title: Text(widget.title),
             bottom: TabBar(tabs: [
               Tab(icon: Icon(Icons.sunny_snowing)),
@@ -81,11 +80,13 @@ class SettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         icon: Icon(Icons.settings),
-        onPressed: () {Scaffold.of(context).openEndDrawer();});
+        onPressed: () {
+          Scaffold.of(context).openEndDrawer();
+        });
   }
 }
 
-class SettingsDrawer extends StatelessWidget {
+class SettingsDrawer extends StatefulWidget {
   const SettingsDrawer({
     super.key,
     required this.settingsProvider,
@@ -94,13 +95,48 @@ class SettingsDrawer extends StatelessWidget {
   final SettingsProvider settingsProvider;
 
   @override
+  _SettingsDrawerState createState() => _SettingsDrawerState();
+}
+
+class _SettingsDrawerState extends State<SettingsDrawer> {
+  Color pickerColor = Colors.yellow; // Default color
+
+  @override
+  void initState() {
+    super.initState();
+    pickerColor = Color(widget.settingsProvider.darkModeColor);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Switch(
-          value: settingsProvider.darkMode,
-          onChanged: (bool value) {
-            settingsProvider.toggleMode();
-          }),
-    );
+        child: ListView(
+      padding: const EdgeInsets.all(8),
+      children: <Widget>[
+        Container(
+          child: ColorPicker(
+            pickerColor: pickerColor,
+            onColorChanged: (color) {
+              setState(() {
+                pickerColor = color;
+              });
+            },
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              widget.settingsProvider.setSeedColor(pickerColor);
+            });
+          },
+          child: Text('Update Color'),
+        ),
+        Switch(
+            value: widget.settingsProvider.darkMode,
+            onChanged: (bool value) {
+              widget.settingsProvider.toggleMode();
+            }),
+      ],
+    ));
   }
 }
