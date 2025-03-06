@@ -1,0 +1,2 @@
+C:/Users/flame/Documents/CS492WINTER/cs492-weather-app/android/app/.cxx/Debug/x5n46646/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/flame/Documents/CS492WINTER/cs492-weather-app/android/app/.cxx/Debug/x5n46646/armeabi-v7a/CMakeFiles/rebuild_cache.dir
